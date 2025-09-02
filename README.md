@@ -106,7 +106,7 @@ Image: https://hub.docker.com/repository/docker/k33g/mcp-snippets-server/tags
 services:
 
   mcp-snippets-server:
-    image: k33g/mcp-snippets-server:0.0.1
+    image: k33g/mcp-snippets-server:0.0.2
     ports:
       - 9090:6060
     environment:

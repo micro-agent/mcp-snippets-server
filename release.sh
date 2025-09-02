@@ -18,11 +18,12 @@ echo "📝 Replacing ${PREVIOUS_DOCKER_TAG} by ${DOCKER_TAG} in files..."
 for dir in tests/*/; do
   if [ -f "${dir}compose.yml" ]; then
     echo "Updating ${dir}compose.yml"
-    go run release.go -old="github.com/micro-agent/mcp-snippets-server ${PREVIOUS_DOCKER_TAG}" -new="github.com/micro-agent/mcp-snippets-server ${DOCKER_TAG}" -file="${dir}compose.yml"
+    go run release.go -old="${PREVIOUS_DOCKER_TAG}" -new="${DOCKER_TAG}" -file="${dir}compose.yml"
   fi
 done
 
-go run release.go -old="github.com/micro-agent/mcp-snippets-server ${PREVIOUS_DOCKER_TAG}" -new="github.com/micro-agent/mcp-snippets-server ${DOCKER_TAG}" -file="./README.md"
+go run release.go -old="${PREVIOUS_DOCKER_TAG}" -new="${DOCKER_TAG}" -file="tests/start.with.docker/compose.yml"
+go run release.go -old="${PREVIOUS_DOCKER_TAG}" -new="${DOCKER_TAG}" -file="README.md"
 
 git add .
 git commit -m "📦 ${ABOUT}"
