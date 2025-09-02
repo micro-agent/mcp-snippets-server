@@ -1,0 +1,28 @@
+services:
+
+  mcp-snippets-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    #image: mcp-snippets-server:demo
+    ports:
+      - 9090:6060
+    environment:
+      - MCP_HTTP_PORT=6060
+      - LIMIT=0.6
+      - MAX_RESULTS=1
+      - JSON_STORE_FILE_PATH=store/rag-memory-store.json
+    volumes:
+      - ./snippets:/app/snippets
+      - ./store:/app/store
+
+    models:
+      mxbai-embed:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: EMBEDDING_MODEL
+
+models:
+  mxbai-embed:
+    model: ai/mxbai-embed-large:latest
+
+
