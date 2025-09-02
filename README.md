@@ -94,3 +94,42 @@ The server provides one MCP tool:
 ## Docker Support
 
 The project includes Docker configuration for easy deployment.
+
+## Use the Docker Image
+
+Image: https://hub.docker.com/repository/docker/k33g/mcp-snippets-server/tags
+
+1. In a directory, create a `snippets` folder and add your `.md` files with code snippets.
+2. Create a `compose.yml` file with the following content:
+
+```yaml
+services:
+
+  mcp-snippets-server:
+    image: k33g/mcp-snippets-server:0.0.1
+    ports:
+      - 9090:6060
+    environment:
+      - MCP_HTTP_PORT=6060
+      - LIMIT=0.6
+      - MAX_RESULTS=2
+      - JSON_STORE_FILE_PATH=store/rag-memory-store.json
+    volumes:
+      - ./snippets:/app/snippets
+      - ./store:/app/store
+
+    models:
+      mxbai-embed:
+        endpoint_var: MODEL_RUNNER_BASE_URL
+        model_var: EMBEDDING_MODEL
+
+models:
+  mxbai-embed:
+    model: ai/mxbai-embed-large:latest
+```
+
+Start the server with:
+
+```bash
+docker compose up
+```

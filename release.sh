@@ -13,6 +13,17 @@ echo "Generating release: ${TAG} ${ABOUT}"
 
 find . -name '.DS_Store' -type f -delete
 
+echo "📝 Replacing ${PREVIOUS_DOCKER_TAG} by ${DOCKER_TAG} in files..."
+
+for dir in tests/*/; do
+  if [ -f "${dir}compose.yml" ]; then
+    echo "Updating ${dir}compose.yml"
+    go run release.go -old="github.com/micro-agent/mcp-snippets-server ${PREVIOUS_DOCKER_TAG}" -new="github.com/micro-agent/mcp-snippets-server ${DOCKER_TAG}" -file="${dir}compose.yml"
+  fi
+done
+
+go run release.go -old="github.com/micro-agent/mcp-snippets-server ${PREVIOUS_DOCKER_TAG}" -new="github.com/micro-agent/mcp-snippets-server ${DOCKER_TAG}" -file="./README.md"
+
 git add .
 git commit -m "📦 ${ABOUT}"
 git push origin main
