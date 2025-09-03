@@ -15,8 +15,8 @@ find . -name '.DS_Store' -type f -delete
 
 echo "📝 Replacing ${PREVIOUS_DOCKER_TAG} by ${DOCKER_TAG} in files..."
 
-go run release.go -old="${PREVIOUS_DOCKER_TAG}" -new="${DOCKER_TAG}" -file="tests/start.with.docker/compose.yml"
-go run release.go -old="${PREVIOUS_DOCKER_TAG}" -new="${DOCKER_TAG}" -file="README.md"
+go run ./release/release.go -old="${PREVIOUS_DOCKER_TAG}" -new="${DOCKER_TAG}" -file="tests/start.with.docker/compose.yml"
+go run ./release/release.go -old="${PREVIOUS_DOCKER_TAG}" -new="${DOCKER_TAG}" -file="README.md"
 
 git add .
 git commit -m "📦 ${ABOUT}"
