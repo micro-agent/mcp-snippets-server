@@ -12,8 +12,7 @@ services:
       - LIMIT=0.6
       - MAX_RESULTS=1
       - JSON_STORE_FILE_PATH=store/rag-memory-store.json
-      - MINIMUM_DELIMITER=----------
-      - MAXIMUM_DELIMITER=----------------------------------------
+      - DELIMITER=----------
     volumes:
       - ./snippets:/app/snippets
       - ./store:/app/store

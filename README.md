@@ -106,7 +106,7 @@ Image: https://hub.docker.com/repository/docker/k33g/mcp-snippets-server/tags
 services:
 
   mcp-snippets-server:
-    image: k33g/mcp-snippets-server:0.0.3
+    image: k33g/mcp-snippets-server:0.0.4
     ports:
       - 9090:6060
     environment:
@@ -114,8 +114,7 @@ services:
       - LIMIT=0.6
       - MAX_RESULTS=2
       - JSON_STORE_FILE_PATH=store/rag-memory-store.json
-      - MINIMUM_DELIMITER=----------
-      - MAXIMUM_DELIMITER=----------------------------------------
+      - DELIMITER=----------
     volumes:
       - ./snippets:/app/snippets
       - ./store:/app/store

@@ -21,24 +21,6 @@ var store rag.MemoryVectorStore
 var embeddingAgent mu.Agent
 var embeddingsModel string
 
-// determineDelimiter returns an appropriate delimiter based on min/max constraints
-func determineDelimiter(minDelimiter, maxDelimiter string) string {
-	// If min is longer than max, use max
-	if len(minDelimiter) > len(maxDelimiter) {
-		return maxDelimiter
-	}
-	
-	// Check if max delimiter length meets minimum requirement
-	if len(maxDelimiter) >= len(minDelimiter) {
-		// Use a delimiter that's between min and max length
-		// For simplicity, we'll use the min delimiter as it's guaranteed to be valid
-		return minDelimiter
-	}
-	
-	// Fallback to a default delimiter
-	return "----------"
-}
-
 func main() {
 	ctx := context.Background()
 
@@ -51,8 +33,7 @@ func main() {
 	baseURL := helpers.GetEnvOrDefault("MODEL_RUNNER_BASE_URL", "http://localhost:12434/engines/llama.cpp/v1/")
 	embeddingsModel = helpers.GetEnvOrDefault("EMBEDDING_MODEL", "ai/mxbai-embed-large:latest")
 	jsonStoreFilePath := helpers.GetEnvOrDefault("JSON_STORE_FILE_PATH", "rag-memory-store.json")
-	minDelimiter := helpers.GetEnvOrDefault("MINIMUM_DELIMITER", "----------")
-	maxDelimiter := helpers.GetEnvOrDefault("MAXIMUM_DELIMITER", "----------------------------------------")
+	delimiter := helpers.GetEnvOrDefault("DELIMITER", "----------")
 
 	client := openai.NewClient(
 		option.WithBaseURL(baseURL),
@@ -101,7 +82,6 @@ func main() {
 
 			for _, content := range contents {
 				// Determine appropriate delimiter based on min/max constraints
-				delimiter := determineDelimiter(minDelimiter, maxDelimiter)
 				fmt.Println("📏 Using delimiter:", delimiter, "(length:", len(delimiter), ")")
 				chunks = append(chunks, rag.SplitTextWithDelimiter(content, delimiter)...)
 			}
@@ -217,8 +197,6 @@ func searchInDocHandler(ctx context.Context, request mcp.CallToolRequest) (*mcp.
 	// Create a vector record from the user embedding
 	// -------------------------------------------------
 	questionRecord := rag.VectorRecord{Embedding: questionEmbeddingVector}
-
-
 
 	threshold := helpers.StringToFloat(helpers.GetEnvOrDefault("LIMIT", "0.6"))
 	topN := helpers.StringToInt(helpers.GetEnvOrDefault("MAX_RESULTS", "2"))
